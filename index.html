@@ -216,6 +216,17 @@
         transform: scale(1);
       }
 
+      /* Instant display for cached images */
+      .gallery-item img.instant {
+        opacity: 1 !important;
+        transform: scale(1) !important;
+        transition: none !important;
+      }
+
+      .gallery-item.instant::before {
+        display: none !important;
+      }
+
       @keyframes shimmer {
         0% {
           background-position: -200% 0;
@@ -1010,8 +1021,15 @@
         return shuffled;
       }
 
-      // Shuffle images on every load
-      const shuffledImages = shuffleArray(availableImages);
+      // Get or create shuffled order - persist during session
+      let shuffledImages;
+      const savedOrder = sessionStorage.getItem("imageOrder");
+      if (savedOrder) {
+        shuffledImages = JSON.parse(savedOrder);
+      } else {
+        shuffledImages = shuffleArray(availableImages);
+        sessionStorage.setItem("imageOrder", JSON.stringify(shuffledImages));
+      }
 
       // Intersection Observer for lazy loading
       let observer;
@@ -1078,23 +1096,62 @@
         img.alt = imageName;
         img.loading = "lazy"; // Native lazy loading
         img.decoding = "async"; // Async image decoding
-        img.dataset.src = `${imageFolder}${imageName}`;
 
-        // Use a tiny placeholder
-        img.src =
-          "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+        const imageUrl = `${imageFolder}${imageName}`;
 
-        // Add loading class initially
-        img.classList.add("loading");
+        // Check if image was already loaded in this session
+        const loadedImages = JSON.parse(
+          sessionStorage.getItem("loadedImages") || "[]"
+        );
+        const wasLoaded = loadedImages.includes(imageName);
 
-        // Remove loading class when image is fully loaded
+        if (wasLoaded) {
+          // Image was previously loaded, show it immediately from cache without any transition
+          img.src = imageUrl;
+          // Mark as already processed to skip onload handler
+          img.dataset.alreadyLoaded = "true";
+          // Use instant class for immediate display without transitions
+          img.classList.add("loaded", "instant");
+          item.classList.add("loaded", "instant");
+        } else {
+          // Image not loaded yet, use lazy loading with shimmer
+          img.dataset.src = imageUrl;
+          img.src =
+            "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+          img.classList.add("loading");
+        }
+
+        // Remove loading class when image is fully loaded (only for first-time loads)
         img.onload = function () {
-          // Small delay for smooth transition
-          setTimeout(() => {
-            this.classList.remove("loading");
-            this.classList.add("loaded");
-            item.classList.add("loaded");
-          }, 100);
+          // Skip if this is a previously loaded image being restored
+          if (this.dataset.alreadyLoaded === "true") {
+            return;
+          }
+
+          if (
+            !this.classList.contains("loaded") &&
+            this.src !==
+              "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          ) {
+            // Mark image as loaded in session storage
+            const loadedImages = JSON.parse(
+              sessionStorage.getItem("loadedImages") || "[]"
+            );
+            if (!loadedImages.includes(imageName)) {
+              loadedImages.push(imageName);
+              sessionStorage.setItem(
+                "loadedImages",
+                JSON.stringify(loadedImages)
+              );
+            }
+
+            // Small delay for smooth transition
+            setTimeout(() => {
+              this.classList.remove("loading");
+              this.classList.add("loaded");
+              item.classList.add("loaded");
+            }, 100);
+          }
         };
 
         // Remove item from DOM if image fails to load
@@ -1115,6 +1172,16 @@
 
         item.appendChild(img);
         container.appendChild(item);
+      }
+
+      // Clean URL - remove index.html if present
+      if (window.location.pathname.endsWith("/index.html")) {
+        const cleanPath = window.location.pathname.replace("/index.html", "/");
+        history.replaceState(
+          null,
+          "",
+          cleanPath + window.location.search + window.location.hash
+        );
       }
 
       // Load images when DOM is ready
