@@ -1026,7 +1026,8 @@
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
                 const img = entry.target;
-                if (img.dataset.src) {
+                if (img.dataset.src && !img.dataset.loading) {
+                  img.dataset.loading = "true";
                   img.src = img.dataset.src;
                   img.removeAttribute("data-src");
                   observer.unobserve(img);
@@ -1057,10 +1058,11 @@
             const rect = img.getBoundingClientRect();
             const isVisible =
               rect.top < window.innerHeight + 200 && rect.bottom > -200;
-            if (isVisible) {
+            if (isVisible && !img.dataset.loading) {
+              img.dataset.loading = "true";
               img.src = img.dataset.src;
               img.removeAttribute("data-src");
-            } else {
+            } else if (!img.dataset.loading) {
               observer.observe(img);
             }
           });
