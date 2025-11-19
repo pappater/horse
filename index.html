@@ -295,6 +295,146 @@
         text-align: center;
         font-size: 14px;
         color: #666;
+        position: relative;
+        overflow: visible;
+        min-height: 60px;
+        z-index: 1000;
+      }
+
+      .running-horses {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .title:hover ~ .gallery-container ~ .footer .running-horses,
+      .title:hover ~ .footer .running-horses {
+        opacity: 1;
+      }
+
+      .running-horse {
+        position: absolute;
+        width: 120px;
+        height: 90px;
+        animation: run-across linear infinite,
+          gallop-bounce 0.4s ease-in-out infinite;
+      }
+
+      .running-horse:nth-child(1) {
+        animation-delay: 0s, 0s;
+        animation-duration: 25s, 0.3s;
+        top: -35px;
+      }
+
+      .running-horse:nth-child(2) {
+        animation-delay: 1.5s, 0.05s;
+        animation-duration: 26s, 0.3s;
+        top: -42px;
+      }
+
+      .running-horse:nth-child(3) {
+        animation-delay: 3s, 0.1s;
+        animation-duration: 24s, 0.3s;
+        top: -30px;
+      }
+
+      .running-horse:nth-child(4) {
+        animation-delay: 4.5s, 0.15s;
+        animation-duration: 25.5s, 0.3s;
+        top: -38px;
+      }
+
+      .running-horse:nth-child(5) {
+        animation-delay: 6s, 0.2s;
+        animation-duration: 27s, 0.3s;
+        top: -45px;
+      }
+
+      .running-horse:nth-child(6) {
+        animation-delay: 7.5s, 0.25s;
+        animation-duration: 26.5s, 0.3s;
+        top: -32px;
+      }
+
+      .running-horse:nth-child(7) {
+        animation-delay: 9s, 0.05s;
+        animation-duration: 25.8s, 0.3s;
+        top: -40px;
+      }
+
+      .running-horse:nth-child(8) {
+        animation-delay: 10.5s, 0.1s;
+        animation-duration: 24.5s, 0.3s;
+        top: -28px;
+      }
+
+      .running-horse:nth-child(9) {
+        animation-delay: 12s, 0.15s;
+        animation-duration: 26.2s, 0.3s;
+        top: -44px;
+      }
+
+      .running-horse:nth-child(10) {
+        animation-delay: 13.5s, 0.2s;
+        animation-duration: 25.3s, 0.3s;
+        top: -34px;
+      }
+
+      /* Animated legs */
+      .running-horse .leg1,
+      .running-horse .leg3 {
+        animation: leg-move-1 0.3s ease-in-out infinite;
+      }
+
+      .running-horse .leg2,
+      .running-horse .leg4 {
+        animation: leg-move-2 0.3s ease-in-out infinite;
+      }
+
+      @keyframes leg-move-1 {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(3px);
+        }
+      }
+
+      @keyframes leg-move-2 {
+        0%,
+        100% {
+          transform: translateY(3px);
+        }
+        50% {
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes run-across {
+        0% {
+          left: calc(100% + 100px);
+        }
+        100% {
+          left: -150px;
+        }
+      }
+
+      @keyframes gallop-bounce {
+        0%,
+        100% {
+          transform: translateY(0) scaleY(1);
+        }
+        50% {
+          transform: translateY(-8px) scaleY(0.95);
+        }
       }
 
       @media screen and (max-width: 768px) {
@@ -380,7 +520,434 @@
       <div class="gallery" id="gallery"></div>
     </div>
 
-    <footer class="footer">All images in this gallery are AI-generated</footer>
+    <footer class="footer">
+      <div class="running-horses">
+        <div class="running-horse">
+          <svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+            <!-- Head -->
+            <rect x="10" y="3" width="2" height="3" fill="#000" />
+            <rect x="9" y="5" width="1" height="1" fill="#000" />
+            <rect x="10" y="6" width="1" height="1" fill="#000" />
+            <rect x="11" y="7" width="1" height="1" fill="#000" />
+            <rect x="8" y="4" width="2" height="1" fill="#000" />
+            <rect x="7" y="5" width="3" height="1" fill="#000" />
+            <!-- Neck -->
+            <rect x="11" y="6" width="2" height="4" fill="#000" />
+            <rect x="10" y="10" width="2" height="2" fill="#000" />
+            <!-- Body -->
+            <rect x="6" y="6" width="5" height="4" fill="#8B4513" />
+            <rect x="8" y="7" width="1" height="1" fill="#000" />
+            <rect x="6" y="5" width="2" height="1" fill="#000" />
+            <!-- Front body -->
+            <rect x="3" y="8" width="3" height="2" fill="#000" />
+            <rect x="4" y="9" width="2" height="2" fill="#D2691E" />
+            <rect x="2" y="9" width="2" height="1" fill="#000" />
+            <rect x="3" y="9" width="1" height="1" fill="#000" />
+            <rect x="5" y="10" width="2" height="1" fill="#000" />
+            <rect x="6" y="11" width="1" height="1" fill="#000" />
+            <!-- Back body -->
+            <rect x="12" y="8" width="6" height="3" fill="#8B4513" />
+            <rect x="12" y="7" width="6" height="1" fill="#000" />
+            <rect x="18" y="8" width="1" height="3" fill="#000" />
+            <rect x="12" y="11" width="6" height="1" fill="#000" />
+            <!-- Tail -->
+            <rect x="18" y="9" width="1" height="2" fill="#000" />
+            <rect x="19" y="9" width="1" height="3" fill="#000" />
+            <rect x="20" y="10" width="1" height="3" fill="#000" />
+            <rect x="21" y="11" width="1" height="2" fill="#000" />
+            <!-- Front Legs (animated) -->
+            <g class="leg1">
+              <rect x="12" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg2">
+              <rect x="14" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <!-- Back Legs (animated) -->
+            <g class="leg3">
+              <rect x="16" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg4">
+              <rect x="17" y="12" width="1" height="3" fill="#000" />
+            </g>
+          </svg>
+        </div>
+        <div class="running-horse">
+          <svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="3" width="2" height="3" fill="#000" />
+            <rect x="9" y="5" width="1" height="1" fill="#000" />
+            <rect x="10" y="6" width="1" height="1" fill="#000" />
+            <rect x="11" y="7" width="1" height="1" fill="#000" />
+            <rect x="8" y="4" width="2" height="1" fill="#000" />
+            <rect x="7" y="5" width="3" height="1" fill="#000" />
+            <rect x="11" y="6" width="2" height="4" fill="#000" />
+            <rect x="10" y="10" width="2" height="2" fill="#000" />
+            <rect x="6" y="6" width="5" height="4" fill="#8B4513" />
+            <rect x="8" y="7" width="1" height="1" fill="#000" />
+            <rect x="6" y="5" width="2" height="1" fill="#000" />
+            <rect x="3" y="8" width="3" height="2" fill="#000" />
+            <rect x="4" y="9" width="2" height="2" fill="#D2691E" />
+            <rect x="2" y="9" width="2" height="1" fill="#000" />
+            <rect x="3" y="9" width="1" height="1" fill="#000" />
+            <rect x="5" y="10" width="2" height="1" fill="#000" />
+            <rect x="6" y="11" width="1" height="1" fill="#000" />
+            <rect x="12" y="8" width="6" height="3" fill="#8B4513" />
+            <rect x="12" y="7" width="6" height="1" fill="#000" />
+            <rect x="18" y="8" width="1" height="3" fill="#000" />
+            <rect x="12" y="11" width="6" height="1" fill="#000" />
+            <rect x="18" y="9" width="1" height="2" fill="#000" />
+            <rect x="19" y="9" width="1" height="3" fill="#000" />
+            <rect x="20" y="10" width="1" height="3" fill="#000" />
+            <rect x="21" y="11" width="1" height="2" fill="#000" />
+            <g class="leg1">
+              <rect x="12" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg2">
+              <rect x="14" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg3">
+              <rect x="16" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg4">
+              <rect x="17" y="12" width="1" height="3" fill="#000" />
+            </g>
+          </svg>
+        </div>
+        <div class="running-horse">
+          <svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="3" width="2" height="3" fill="#000" />
+            <rect x="9" y="5" width="1" height="1" fill="#000" />
+            <rect x="10" y="6" width="1" height="1" fill="#000" />
+            <rect x="11" y="7" width="1" height="1" fill="#000" />
+            <rect x="8" y="4" width="2" height="1" fill="#000" />
+            <rect x="7" y="5" width="3" height="1" fill="#000" />
+            <rect x="11" y="6" width="2" height="4" fill="#000" />
+            <rect x="10" y="10" width="2" height="2" fill="#000" />
+            <rect x="6" y="6" width="5" height="4" fill="#8B4513" />
+            <rect x="8" y="7" width="1" height="1" fill="#000" />
+            <rect x="6" y="5" width="2" height="1" fill="#000" />
+            <rect x="3" y="8" width="3" height="2" fill="#000" />
+            <rect x="4" y="9" width="2" height="2" fill="#D2691E" />
+            <rect x="2" y="9" width="2" height="1" fill="#000" />
+            <rect x="3" y="9" width="1" height="1" fill="#000" />
+            <rect x="5" y="10" width="2" height="1" fill="#000" />
+            <rect x="6" y="11" width="1" height="1" fill="#000" />
+            <rect x="12" y="8" width="6" height="3" fill="#8B4513" />
+            <rect x="12" y="7" width="6" height="1" fill="#000" />
+            <rect x="18" y="8" width="1" height="3" fill="#000" />
+            <rect x="12" y="11" width="6" height="1" fill="#000" />
+            <rect x="18" y="9" width="1" height="2" fill="#000" />
+            <rect x="19" y="9" width="1" height="3" fill="#000" />
+            <rect x="20" y="10" width="1" height="3" fill="#000" />
+            <rect x="21" y="11" width="1" height="2" fill="#000" />
+            <g class="leg1">
+              <rect x="12" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg2">
+              <rect x="14" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg3">
+              <rect x="16" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg4">
+              <rect x="17" y="12" width="1" height="3" fill="#000" />
+            </g>
+          </svg>
+        </div>
+        <div class="running-horse">
+          <svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="3" width="2" height="3" fill="#000" />
+            <rect x="9" y="5" width="1" height="1" fill="#000" />
+            <rect x="10" y="6" width="1" height="1" fill="#000" />
+            <rect x="11" y="7" width="1" height="1" fill="#000" />
+            <rect x="8" y="4" width="2" height="1" fill="#000" />
+            <rect x="7" y="5" width="3" height="1" fill="#000" />
+            <rect x="11" y="6" width="2" height="4" fill="#000" />
+            <rect x="10" y="10" width="2" height="2" fill="#000" />
+            <rect x="6" y="6" width="5" height="4" fill="#8B4513" />
+            <rect x="8" y="7" width="1" height="1" fill="#000" />
+            <rect x="6" y="5" width="2" height="1" fill="#000" />
+            <rect x="3" y="8" width="3" height="2" fill="#000" />
+            <rect x="4" y="9" width="2" height="2" fill="#D2691E" />
+            <rect x="2" y="9" width="2" height="1" fill="#000" />
+            <rect x="3" y="9" width="1" height="1" fill="#000" />
+            <rect x="5" y="10" width="2" height="1" fill="#000" />
+            <rect x="6" y="11" width="1" height="1" fill="#000" />
+            <rect x="12" y="8" width="6" height="3" fill="#8B4513" />
+            <rect x="12" y="7" width="6" height="1" fill="#000" />
+            <rect x="18" y="8" width="1" height="3" fill="#000" />
+            <rect x="12" y="11" width="6" height="1" fill="#000" />
+            <rect x="18" y="9" width="1" height="2" fill="#000" />
+            <rect x="19" y="9" width="1" height="3" fill="#000" />
+            <rect x="20" y="10" width="1" height="3" fill="#000" />
+            <rect x="21" y="11" width="1" height="2" fill="#000" />
+            <g class="leg1">
+              <rect x="12" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg2">
+              <rect x="14" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg3">
+              <rect x="16" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg4">
+              <rect x="17" y="12" width="1" height="3" fill="#000" />
+            </g>
+          </svg>
+        </div>
+        <div class="running-horse">
+          <svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="3" width="2" height="3" fill="#000" />
+            <rect x="9" y="5" width="1" height="1" fill="#000" />
+            <rect x="10" y="6" width="1" height="1" fill="#000" />
+            <rect x="11" y="7" width="1" height="1" fill="#000" />
+            <rect x="8" y="4" width="2" height="1" fill="#000" />
+            <rect x="7" y="5" width="3" height="1" fill="#000" />
+            <rect x="11" y="6" width="2" height="4" fill="#000" />
+            <rect x="10" y="10" width="2" height="2" fill="#000" />
+            <rect x="6" y="6" width="5" height="4" fill="#8B4513" />
+            <rect x="8" y="7" width="1" height="1" fill="#000" />
+            <rect x="6" y="5" width="2" height="1" fill="#000" />
+            <rect x="3" y="8" width="3" height="2" fill="#000" />
+            <rect x="4" y="9" width="2" height="2" fill="#D2691E" />
+            <rect x="2" y="9" width="2" height="1" fill="#000" />
+            <rect x="3" y="9" width="1" height="1" fill="#000" />
+            <rect x="5" y="10" width="2" height="1" fill="#000" />
+            <rect x="6" y="11" width="1" height="1" fill="#000" />
+            <rect x="12" y="8" width="6" height="3" fill="#8B4513" />
+            <rect x="12" y="7" width="6" height="1" fill="#000" />
+            <rect x="18" y="8" width="1" height="3" fill="#000" />
+            <rect x="12" y="11" width="6" height="1" fill="#000" />
+            <rect x="18" y="9" width="1" height="2" fill="#000" />
+            <rect x="19" y="9" width="1" height="3" fill="#000" />
+            <rect x="20" y="10" width="1" height="3" fill="#000" />
+            <rect x="21" y="11" width="1" height="2" fill="#000" />
+            <g class="leg1">
+              <rect x="12" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg2">
+              <rect x="14" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg3">
+              <rect x="16" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg4">
+              <rect x="17" y="12" width="1" height="3" fill="#000" />
+            </g>
+          </svg>
+        </div>
+        <div class="running-horse">
+          <svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="3" width="2" height="3" fill="#000" />
+            <rect x="9" y="5" width="1" height="1" fill="#000" />
+            <rect x="10" y="6" width="1" height="1" fill="#000" />
+            <rect x="11" y="7" width="1" height="1" fill="#000" />
+            <rect x="8" y="4" width="2" height="1" fill="#000" />
+            <rect x="7" y="5" width="3" height="1" fill="#000" />
+            <rect x="11" y="6" width="2" height="4" fill="#000" />
+            <rect x="10" y="10" width="2" height="2" fill="#000" />
+            <rect x="6" y="6" width="5" height="4" fill="#8B4513" />
+            <rect x="8" y="7" width="1" height="1" fill="#000" />
+            <rect x="6" y="5" width="2" height="1" fill="#000" />
+            <rect x="3" y="8" width="3" height="2" fill="#000" />
+            <rect x="4" y="9" width="2" height="2" fill="#D2691E" />
+            <rect x="2" y="9" width="2" height="1" fill="#000" />
+            <rect x="3" y="9" width="1" height="1" fill="#000" />
+            <rect x="5" y="10" width="2" height="1" fill="#000" />
+            <rect x="6" y="11" width="1" height="1" fill="#000" />
+            <rect x="12" y="8" width="6" height="3" fill="#8B4513" />
+            <rect x="12" y="7" width="6" height="1" fill="#000" />
+            <rect x="18" y="8" width="1" height="3" fill="#000" />
+            <rect x="12" y="11" width="6" height="1" fill="#000" />
+            <rect x="18" y="9" width="1" height="2" fill="#000" />
+            <rect x="19" y="9" width="1" height="3" fill="#000" />
+            <rect x="20" y="10" width="1" height="3" fill="#000" />
+            <rect x="21" y="11" width="1" height="2" fill="#000" />
+            <g class="leg1">
+              <rect x="12" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg2">
+              <rect x="14" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg3">
+              <rect x="16" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg4">
+              <rect x="17" y="12" width="1" height="3" fill="#000" />
+            </g>
+          </svg>
+        </div>
+        <div class="running-horse">
+          <svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="3" width="2" height="3" fill="#000" />
+            <rect x="9" y="5" width="1" height="1" fill="#000" />
+            <rect x="10" y="6" width="1" height="1" fill="#000" />
+            <rect x="11" y="7" width="1" height="1" fill="#000" />
+            <rect x="8" y="4" width="2" height="1" fill="#000" />
+            <rect x="7" y="5" width="3" height="1" fill="#000" />
+            <rect x="11" y="6" width="2" height="4" fill="#000" />
+            <rect x="10" y="10" width="2" height="2" fill="#000" />
+            <rect x="6" y="6" width="5" height="4" fill="#8B4513" />
+            <rect x="8" y="7" width="1" height="1" fill="#000" />
+            <rect x="6" y="5" width="2" height="1" fill="#000" />
+            <rect x="3" y="8" width="3" height="2" fill="#000" />
+            <rect x="4" y="9" width="2" height="2" fill="#D2691E" />
+            <rect x="2" y="9" width="2" height="1" fill="#000" />
+            <rect x="3" y="9" width="1" height="1" fill="#000" />
+            <rect x="5" y="10" width="2" height="1" fill="#000" />
+            <rect x="6" y="11" width="1" height="1" fill="#000" />
+            <rect x="12" y="8" width="6" height="3" fill="#8B4513" />
+            <rect x="12" y="7" width="6" height="1" fill="#000" />
+            <rect x="18" y="8" width="1" height="3" fill="#000" />
+            <rect x="12" y="11" width="6" height="1" fill="#000" />
+            <rect x="18" y="9" width="1" height="2" fill="#000" />
+            <rect x="19" y="9" width="1" height="3" fill="#000" />
+            <rect x="20" y="10" width="1" height="3" fill="#000" />
+            <rect x="21" y="11" width="1" height="2" fill="#000" />
+            <g class="leg1">
+              <rect x="12" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg2">
+              <rect x="14" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg3">
+              <rect x="16" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg4">
+              <rect x="17" y="12" width="1" height="3" fill="#000" />
+            </g>
+          </svg>
+        </div>
+        <div class="running-horse">
+          <svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="3" width="2" height="3" fill="#000" />
+            <rect x="9" y="5" width="1" height="1" fill="#000" />
+            <rect x="10" y="6" width="1" height="1" fill="#000" />
+            <rect x="11" y="7" width="1" height="1" fill="#000" />
+            <rect x="8" y="4" width="2" height="1" fill="#000" />
+            <rect x="7" y="5" width="3" height="1" fill="#000" />
+            <rect x="11" y="6" width="2" height="4" fill="#000" />
+            <rect x="10" y="10" width="2" height="2" fill="#000" />
+            <rect x="6" y="6" width="5" height="4" fill="#8B4513" />
+            <rect x="8" y="7" width="1" height="1" fill="#000" />
+            <rect x="6" y="5" width="2" height="1" fill="#000" />
+            <rect x="3" y="8" width="3" height="2" fill="#000" />
+            <rect x="4" y="9" width="2" height="2" fill="#D2691E" />
+            <rect x="2" y="9" width="2" height="1" fill="#000" />
+            <rect x="3" y="9" width="1" height="1" fill="#000" />
+            <rect x="5" y="10" width="2" height="1" fill="#000" />
+            <rect x="6" y="11" width="1" height="1" fill="#000" />
+            <rect x="12" y="8" width="6" height="3" fill="#8B4513" />
+            <rect x="12" y="7" width="6" height="1" fill="#000" />
+            <rect x="18" y="8" width="1" height="3" fill="#000" />
+            <rect x="12" y="11" width="6" height="1" fill="#000" />
+            <rect x="18" y="9" width="1" height="2" fill="#000" />
+            <rect x="19" y="9" width="1" height="3" fill="#000" />
+            <rect x="20" y="10" width="1" height="3" fill="#000" />
+            <rect x="21" y="11" width="1" height="2" fill="#000" />
+            <g class="leg1">
+              <rect x="12" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg2">
+              <rect x="14" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg3">
+              <rect x="16" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg4">
+              <rect x="17" y="12" width="1" height="3" fill="#000" />
+            </g>
+          </svg>
+        </div>
+        <div class="running-horse">
+          <svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="3" width="2" height="3" fill="#000" />
+            <rect x="9" y="5" width="1" height="1" fill="#000" />
+            <rect x="10" y="6" width="1" height="1" fill="#000" />
+            <rect x="11" y="7" width="1" height="1" fill="#000" />
+            <rect x="8" y="4" width="2" height="1" fill="#000" />
+            <rect x="7" y="5" width="3" height="1" fill="#000" />
+            <rect x="11" y="6" width="2" height="4" fill="#000" />
+            <rect x="10" y="10" width="2" height="2" fill="#000" />
+            <rect x="6" y="6" width="5" height="4" fill="#8B4513" />
+            <rect x="8" y="7" width="1" height="1" fill="#000" />
+            <rect x="6" y="5" width="2" height="1" fill="#000" />
+            <rect x="3" y="8" width="3" height="2" fill="#000" />
+            <rect x="4" y="9" width="2" height="2" fill="#D2691E" />
+            <rect x="2" y="9" width="2" height="1" fill="#000" />
+            <rect x="3" y="9" width="1" height="1" fill="#000" />
+            <rect x="5" y="10" width="2" height="1" fill="#000" />
+            <rect x="6" y="11" width="1" height="1" fill="#000" />
+            <rect x="12" y="8" width="6" height="3" fill="#8B4513" />
+            <rect x="12" y="7" width="6" height="1" fill="#000" />
+            <rect x="18" y="8" width="1" height="3" fill="#000" />
+            <rect x="12" y="11" width="6" height="1" fill="#000" />
+            <rect x="18" y="9" width="1" height="2" fill="#000" />
+            <rect x="19" y="9" width="1" height="3" fill="#000" />
+            <rect x="20" y="10" width="1" height="3" fill="#000" />
+            <rect x="21" y="11" width="1" height="2" fill="#000" />
+            <g class="leg1">
+              <rect x="12" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg2">
+              <rect x="14" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg3">
+              <rect x="16" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg4">
+              <rect x="17" y="12" width="1" height="3" fill="#000" />
+            </g>
+          </svg>
+        </div>
+        <div class="running-horse">
+          <svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="3" width="2" height="3" fill="#000" />
+            <rect x="9" y="5" width="1" height="1" fill="#000" />
+            <rect x="10" y="6" width="1" height="1" fill="#000" />
+            <rect x="11" y="7" width="1" height="1" fill="#000" />
+            <rect x="8" y="4" width="2" height="1" fill="#000" />
+            <rect x="7" y="5" width="3" height="1" fill="#000" />
+            <rect x="11" y="6" width="2" height="4" fill="#000" />
+            <rect x="10" y="10" width="2" height="2" fill="#000" />
+            <rect x="6" y="6" width="5" height="4" fill="#8B4513" />
+            <rect x="8" y="7" width="1" height="1" fill="#000" />
+            <rect x="6" y="5" width="2" height="1" fill="#000" />
+            <rect x="3" y="8" width="3" height="2" fill="#000" />
+            <rect x="4" y="9" width="2" height="2" fill="#D2691E" />
+            <rect x="2" y="9" width="2" height="1" fill="#000" />
+            <rect x="3" y="9" width="1" height="1" fill="#000" />
+            <rect x="5" y="10" width="2" height="1" fill="#000" />
+            <rect x="6" y="11" width="1" height="1" fill="#000" />
+            <rect x="12" y="8" width="6" height="3" fill="#8B4513" />
+            <rect x="12" y="7" width="6" height="1" fill="#000" />
+            <rect x="18" y="8" width="1" height="3" fill="#000" />
+            <rect x="12" y="11" width="6" height="1" fill="#000" />
+            <rect x="18" y="9" width="1" height="2" fill="#000" />
+            <rect x="19" y="9" width="1" height="3" fill="#000" />
+            <rect x="20" y="10" width="1" height="3" fill="#000" />
+            <rect x="21" y="11" width="1" height="2" fill="#000" />
+            <g class="leg1">
+              <rect x="12" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg2">
+              <rect x="14" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg3">
+              <rect x="16" y="12" width="1" height="3" fill="#000" />
+            </g>
+            <g class="leg4">
+              <rect x="17" y="12" width="1" height="3" fill="#000" />
+            </g>
+          </svg>
+        </div>
+      </div>
+      <p style="margin: 0; font-size: 14px; color: #666">
+        A collection of equestrian moments
+      </p>
+      <p style="margin: 5px 0 0 0; font-size: 12px; color: #999">
+        Hover the horse above to see magic ✨
+      </p>
+    </footer>
 
     <script>
       // Configuration
