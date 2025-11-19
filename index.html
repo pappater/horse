@@ -62,7 +62,12 @@
             height: auto;
             display: block;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s ease, filter 0.3s ease;
+            filter: grayscale(100%);
+        }
+        
+        .gallery-item:hover img {
+            filter: grayscale(0%);
         }
 
         .gallery-item img.loaded {
@@ -177,14 +182,45 @@
         // To add new images: Just upload image files to the 'images/' folder and commit
         // BUILD_INJECT_START
         const availableImages = [
-            'sample1.jpg',
-            'sample2.jpg',
-            'sample3.jpg',
-            'sample4.jpg',
-            'sample5.jpg',
-            'sample6.jpg',
-            'sample7.jpg',
-            'sample8.jpg'
+            'IMG_0673.JPG',
+            'IMG_1580.JPG',
+            'IMG_1615.JPG',
+            'IMG_1628.JPG',
+            'IMG_1838 (1).JPG',
+            'IMG_1840.JPG',
+            'IMG_1853.JPG',
+            'IMG_1966.JPG',
+            'IMG_2019.JPG',
+            'IMG_2130 (1).JPG',
+            'IMG_2214.JPG',
+            'IMG_2611.JPG',
+            'IMG_3246.JPG',
+            'IMG_3261.JPG',
+            'IMG_3308.JPG',
+            'IMG_3319.JPG',
+            'IMG_3322.JPG',
+            'IMG_3383.JPG',
+            'IMG_3673.JPG',
+            'IMG_3692.JPG',
+            'IMG_4182.JPG',
+            'IMG_5345.JPG',
+            'IMG_5410.JPG',
+            'IMG_5915.JPG',
+            'IMG_5967.JPG',
+            'IMG_6241.JPG',
+            'IMG_6246.JPG',
+            'IMG_6319.JPG',
+            'IMG_6324.JPG',
+            'IMG_6405.JPG',
+            'IMG_6406.JPG',
+            'IMG_6418.JPG',
+            'IMG_7722.JPG',
+            'IMG_8903.JPG',
+            'IMG_8906.JPG',
+            'IMG_8908.JPG',
+            'IMG_8978.JPG',
+            'IMG_8980.JPG',
+            'IMG_9146.JPG'
         ];
         // BUILD_INJECT_END
         
