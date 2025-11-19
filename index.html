@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>horse</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #fafafa;
+            padding-top: 80px;
+        }
+
+        .title {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 64px;
+            font-weight: 900;
+            color: #000;
+            z-index: 1000;
+            line-height: 1;
+            filter: grayscale(100%) brightness(0);
+        }
+
+        .gallery-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .gallery {
+            column-count: 4;
+            column-gap: 15px;
+        }
+
+        .gallery-item {
+            break-inside: avoid;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item img.loaded {
+            opacity: 1;
+        }
+
+        .gallery-item img.loading {
+            min-height: 200px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Responsive design */
+        @media screen and (max-width: 1200px) {
+            .gallery {
+                column-count: 3;
+            }
+            
+            .title {
+                font-size: 56px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .gallery {
+                column-count: 2;
+                column-gap: 10px;
+            }
+            
+            .gallery-item {
+                margin-bottom: 10px;
+            }
+            
+            .title {
+                font-size: 48px;
+                top: 15px;
+                left: 15px;
+            }
+            
+            body {
+                padding-top: 60px;
+            }
+            
+            .gallery-container {
+                padding: 15px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .gallery {
+                column-count: 1;
+            }
+            
+            .title {
+                font-size: 40px;
+                top: 10px;
+                left: 10px;
+            }
+            
+            body {
+                padding-top: 50px;
+            }
+            
+            .gallery-container {
+                padding: 10px;
+            }
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: #f5f5f5;
+            border-top: 1px solid #e0e0e0;
+            padding: 20px;
+            margin-top: 60px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        @media screen and (max-width: 768px) {
+            .footer {
+                padding: 15px;
+                margin-top: 40px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="title">🐴</div>
+    
+    <div class="gallery-container">
+        <div class="gallery" id="gallery"></div>
+    </div>
+
+    <footer class="footer">
+        All images in this gallery are AI-generated
+    </footer>
+
+    <script>
+        // Configuration
+        const imageFolder = 'images/';
+        
+        // Static list of available images
+        // This list is automatically generated during deployment by scanning the images/ folder
+        // To add new images: Just upload image files to the 'images/' folder and commit
+        // BUILD_INJECT_START
+        const availableImages = [
+            'sample1.jpg',
+            'sample2.jpg',
+            'sample3.jpg',
+            'sample4.jpg',
+            'sample5.jpg',
+            'sample6.jpg',
+            'sample7.jpg',
+            'sample8.jpg'
+        ];
+        // BUILD_INJECT_END
+        
+        // Load images from the static list
+        function loadImages() {
+            const gallery = document.getElementById('gallery');
+            
+            // Display all images from the static list
+            availableImages.forEach((imageName) => {
+                addImageToGallery(imageName);
+            });
+        }
+        
+        // Add an image to the gallery
+        function addImageToGallery(imageName) {
+            const gallery = document.getElementById('gallery');
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            
+            const img = document.createElement('img');
+            img.src = `${imageFolder}${imageName}`;
+            img.alt = imageName;
+            img.loading = 'lazy'; // Native lazy loading
+            
+            // Add loading class initially
+            img.classList.add('loading');
+            
+            // Remove loading class when image is fully loaded
+            img.onload = function() {
+                this.classList.remove('loading');
+                this.classList.add('loaded');
+            };
+            
+            // Remove item from DOM if image fails to load
+            img.onerror = function() {
+                console.error(`Failed to load image: ${imageFolder}${imageName}`);
+                item.remove();
+            };
+            
+            // Click handler to open image in full view
+            item.onclick = function() {
+                window.location.href = `image.html?img=${encodeURIComponent(imageName)}`;
+            };
+            
+            item.appendChild(img);
+            gallery.appendChild(item);
+        }
+        
+        // Load images when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadImages);
+        } else {
+            loadImages();
+        }
+    </script>
+</body>
+</html>
