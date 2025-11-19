@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="AI-generated horse image gallery" />
     <title>horse</title>
+
+    <!-- Performance optimizations -->
+    <link rel="preconnect" href="images/" />
+
     <style>
       * {
         margin: 0;
@@ -158,13 +163,48 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
 
+      .gallery-item {
+        position: relative;
+        min-height: 200px;
+      }
+
+      .gallery-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          #e8e8e8 0%,
+          #f5f5f5 20%,
+          #e8e8e8 40%,
+          #e8e8e8 100%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 2s infinite linear;
+        border-radius: 8px;
+        z-index: 1;
+        opacity: 1;
+        transition: opacity 0.4s ease;
+      }
+
+      .gallery-item.loaded::before {
+        opacity: 0;
+        pointer-events: none;
+      }
+
       .gallery-item img {
         width: 100%;
         height: auto;
         display: block;
         opacity: 0;
-        transition: opacity 0.3s ease, filter 0.3s ease;
+        transition: opacity 0.6s ease, filter 0.3s ease, transform 0.3s ease;
         filter: grayscale(100%);
+        transform: scale(0.95);
+        position: relative;
+        z-index: 2;
       }
 
       .gallery-item:hover img {
@@ -173,27 +213,21 @@
 
       .gallery-item img.loaded {
         opacity: 1;
+        transform: scale(1);
       }
 
-      .gallery-item img.loading {
-        min-height: 200px;
-        background: linear-gradient(
-          90deg,
-          #f0f0f0 25%,
-          #e0e0e0 50%,
-          #f0f0f0 75%
-        );
-        background-size: 200% 100%;
-        animation: loading 1.5s infinite;
-      }
-
-      @keyframes loading {
+      @keyframes shimmer {
         0% {
-          background-position: 200% 0;
-        }
-        100% {
           background-position: -200% 0;
         }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+
+      /* Blur-up effect */
+      .gallery-item img.loading {
+        filter: grayscale(100%) blur(10px);
       }
 
       /* Responsive design */
@@ -399,34 +433,99 @@
       ];
       // BUILD_INJECT_END
 
+      // Shuffle array function (Fisher-Yates algorithm)
+      function shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+      }
+
+      // Shuffle images on every load
+      const shuffledImages = shuffleArray(availableImages);
+
+      // Intersection Observer for lazy loading
+      let observer;
+
       // Load images from the static list
       function loadImages() {
         const gallery = document.getElementById("gallery");
 
-        // Display all images from the static list
-        availableImages.forEach((imageName) => {
-          addImageToGallery(imageName);
+        // Set up Intersection Observer for better lazy loading
+        observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const img = entry.target;
+                if (img.dataset.src) {
+                  img.src = img.dataset.src;
+                  img.removeAttribute("data-src");
+                  observer.unobserve(img);
+                }
+              }
+            });
+          },
+          {
+            rootMargin: "200px", // Start loading 200px before entering viewport
+            threshold: 0.01,
+          }
+        );
+
+        // Use DocumentFragment for better performance
+        const fragment = document.createDocumentFragment();
+
+        // Load images (using shuffled array)
+        shuffledImages.forEach((imageName, index) => {
+          addImageToGallery(imageName, fragment);
+        });
+
+        gallery.appendChild(fragment);
+
+        // After adding to DOM, check which images are already in viewport
+        requestAnimationFrame(() => {
+          const images = gallery.querySelectorAll("img[data-src]");
+          images.forEach((img) => {
+            const rect = img.getBoundingClientRect();
+            const isVisible =
+              rect.top < window.innerHeight + 200 && rect.bottom > -200;
+            if (isVisible) {
+              img.src = img.dataset.src;
+              img.removeAttribute("data-src");
+            } else {
+              observer.observe(img);
+            }
+          });
         });
       }
 
       // Add an image to the gallery
-      function addImageToGallery(imageName) {
-        const gallery = document.getElementById("gallery");
+      function addImageToGallery(imageName, container) {
         const item = document.createElement("div");
         item.className = "gallery-item";
 
         const img = document.createElement("img");
-        img.src = `${imageFolder}${imageName}`;
         img.alt = imageName;
         img.loading = "lazy"; // Native lazy loading
+        img.decoding = "async"; // Async image decoding
+        img.dataset.src = `${imageFolder}${imageName}`;
+
+        // Use a tiny placeholder
+        img.src =
+          "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
         // Add loading class initially
         img.classList.add("loading");
 
         // Remove loading class when image is fully loaded
         img.onload = function () {
-          this.classList.remove("loading");
-          this.classList.add("loaded");
+          // Small delay for smooth transition
+          setTimeout(() => {
+            this.classList.remove("loading");
+            this.classList.add("loaded");
+            item.classList.add("loaded");
+          }, 100);
         };
 
         // Remove item from DOM if image fails to load
@@ -436,14 +535,17 @@
         };
 
         // Click handler to open image in full view
-        item.onclick = function () {
-          window.location.href = `image.html?img=${encodeURIComponent(
-            imageName
-          )}`;
+        item.onclick = function (e) {
+          // Only navigate if image is loaded
+          if (img.classList.contains("loaded")) {
+            window.location.href = `image.html?img=${encodeURIComponent(
+              imageName
+            )}`;
+          }
         };
 
         item.appendChild(img);
-        gallery.appendChild(item);
+        container.appendChild(item);
       }
 
       // Load images when DOM is ready
