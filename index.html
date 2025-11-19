@@ -1,280 +1,433 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>horse</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #fafafa;
-            padding-top: 80px;
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        background-color: #fafafa;
+        padding-top: 80px;
+      }
+
+      .title {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        width: 64px;
+        height: 64px;
+        z-index: 1000;
+        transition: width 0.3s ease, height 0.3s ease;
+        cursor: pointer;
+      }
+
+      .title:hover {
+        width: 96px;
+        height: 96px;
+      }
+
+      .title svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .title .horse-body {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .title:hover .horse-body {
+        opacity: 1;
+      }
+
+      /* Running animation */
+      @keyframes gallop {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        25% {
+          transform: translateY(-2px);
+        }
+        50% {
+          transform: translateY(0);
+        }
+        75% {
+          transform: translateY(-2px);
+        }
+      }
+
+      .title:hover {
+        animation: gallop 0.6s ease-in-out infinite;
+      }
+
+      /* Leg animation */
+      @keyframes legMove1 {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(2px);
+        }
+      }
+
+      @keyframes legMove2 {
+        0%,
+        100% {
+          transform: translateY(2px);
+        }
+        50% {
+          transform: translateY(0);
+        }
+      }
+
+      .title:hover .leg1 {
+        animation: legMove1 0.3s ease-in-out infinite;
+      }
+
+      .title:hover .leg2 {
+        animation: legMove2 0.3s ease-in-out infinite;
+      }
+
+      .title:hover .leg3 {
+        animation: legMove1 0.3s ease-in-out infinite;
+      }
+
+      .title:hover .leg4 {
+        animation: legMove2 0.3s ease-in-out infinite;
+      }
+
+      .gallery-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .gallery {
+        column-count: 4;
+        column-gap: 15px;
+      }
+
+      .gallery-item {
+        break-inside: avoid;
+        margin-bottom: 15px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+      }
+
+      .gallery-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .gallery-item img {
+        width: 100%;
+        height: auto;
+        display: block;
+        opacity: 0;
+        transition: opacity 0.3s ease, filter 0.3s ease;
+        filter: grayscale(100%);
+      }
+
+      .gallery-item:hover img {
+        filter: grayscale(0%);
+      }
+
+      .gallery-item img.loaded {
+        opacity: 1;
+      }
+
+      .gallery-item img.loading {
+        min-height: 200px;
+        background: linear-gradient(
+          90deg,
+          #f0f0f0 25%,
+          #e0e0e0 50%,
+          #f0f0f0 75%
+        );
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+      }
+
+      @keyframes loading {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+
+      /* Responsive design */
+      @media screen and (max-width: 1200px) {
+        .gallery {
+          column-count: 3;
         }
 
         .title {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            font-size: 64px;
-            font-weight: 900;
-            color: #000;
-            z-index: 1000;
-            line-height: 1;
-            filter: grayscale(100%) brightness(0);
+          font-size: 56px;
         }
+      }
 
-        .gallery-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
+      @media screen and (max-width: 768px) {
         .gallery {
-            column-count: 4;
-            column-gap: 15px;
+          column-count: 2;
+          column-gap: 10px;
         }
 
         .gallery-item {
-            break-inside: avoid;
-            margin-bottom: 15px;
-            position: relative;
-            overflow: hidden;
-            border-radius: 8px;
-            background: #fff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: pointer;
+          margin-bottom: 10px;
         }
 
-        .gallery-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        .title {
+          font-size: 48px;
+          top: 15px;
+          left: 15px;
         }
 
-        .gallery-item img {
-            width: 100%;
-            height: auto;
-            display: block;
-            opacity: 0;
-            transition: opacity 0.3s ease, filter 0.3s ease;
-            filter: grayscale(100%);
-        }
-        
-        .gallery-item:hover img {
-            filter: grayscale(0%);
+        body {
+          padding-top: 60px;
         }
 
-        .gallery-item img.loaded {
-            opacity: 1;
+        .gallery-container {
+          padding: 15px;
+        }
+      }
+
+      @media screen and (max-width: 480px) {
+        .gallery {
+          column-count: 1;
         }
 
-        .gallery-item img.loading {
-            min-height: 200px;
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
+        .title {
+          font-size: 40px;
+          top: 10px;
+          left: 10px;
         }
 
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        body {
+          padding-top: 50px;
         }
 
-        /* Responsive design */
-        @media screen and (max-width: 1200px) {
-            .gallery {
-                column-count: 3;
-            }
-            
-            .title {
-                font-size: 56px;
-            }
+        .gallery-container {
+          padding: 10px;
         }
+      }
 
-        @media screen and (max-width: 768px) {
-            .gallery {
-                column-count: 2;
-                column-gap: 10px;
-            }
-            
-            .gallery-item {
-                margin-bottom: 10px;
-            }
-            
-            .title {
-                font-size: 48px;
-                top: 15px;
-                left: 15px;
-            }
-            
-            body {
-                padding-top: 60px;
-            }
-            
-            .gallery-container {
-                padding: 15px;
-            }
-        }
+      /* Footer Styles */
+      .footer {
+        background-color: #f5f5f5;
+        border-top: 1px solid #e0e0e0;
+        padding: 20px;
+        margin-top: 60px;
+        text-align: center;
+        font-size: 14px;
+        color: #666;
+      }
 
-        @media screen and (max-width: 480px) {
-            .gallery {
-                column-count: 1;
-            }
-            
-            .title {
-                font-size: 40px;
-                top: 10px;
-                left: 10px;
-            }
-            
-            body {
-                padding-top: 50px;
-            }
-            
-            .gallery-container {
-                padding: 10px;
-            }
-        }
-
-        /* Footer Styles */
+      @media screen and (max-width: 768px) {
         .footer {
-            background-color: #f5f5f5;
-            border-top: 1px solid #e0e0e0;
-            padding: 20px;
-            margin-top: 60px;
-            text-align: center;
-            font-size: 14px;
-            color: #666;
+          padding: 15px;
+          margin-top: 40px;
+          font-size: 12px;
         }
-
-        @media screen and (max-width: 768px) {
-            .footer {
-                padding: 15px;
-                margin-top: 40px;
-                font-size: 12px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
-    <div class="title">🐴</div>
-    
-    <div class="gallery-container">
-        <div class="gallery" id="gallery"></div>
+  </head>
+  <body>
+    <div class="title">
+      <svg
+        viewBox="0 0 24 16"
+        xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="xMinYMin meet"
+      >
+        <!-- Pixelated horse - full body on hover -->
+        <rect x="0" y="0" width="24" height="16" fill="transparent" />
+
+        <!-- HEAD (always visible) -->
+        <!-- Ear -->
+        <rect x="10" y="3" width="2" height="3" fill="#000" />
+        <!-- Mane -->
+        <rect x="9" y="5" width="1" height="1" fill="#000" />
+        <rect x="10" y="6" width="1" height="1" fill="#000" />
+        <rect x="11" y="7" width="1" height="1" fill="#000" />
+        <!-- Top of head -->
+        <rect x="8" y="4" width="2" height="1" fill="#000" />
+        <rect x="7" y="5" width="3" height="1" fill="#000" />
+        <!-- Back of head and neck -->
+        <rect x="11" y="6" width="2" height="4" fill="#000" />
+        <rect x="10" y="10" width="2" height="2" fill="#000" />
+        <!-- Face -->
+        <rect x="6" y="6" width="5" height="4" fill="#8B4513" />
+        <!-- Eye -->
+        <rect x="8" y="7" width="1" height="1" fill="#000" />
+        <!-- Forehead -->
+        <rect x="6" y="5" width="2" height="1" fill="#000" />
+        <!-- Snout/Muzzle -->
+        <rect x="3" y="8" width="3" height="2" fill="#000" />
+        <rect x="4" y="9" width="2" height="2" fill="#D2691E" />
+        <rect x="2" y="9" width="2" height="1" fill="#000" />
+        <!-- Nostril -->
+        <rect x="3" y="9" width="1" height="1" fill="#000" />
+        <!-- Mouth/chin -->
+        <rect x="5" y="10" width="2" height="1" fill="#000" />
+        <rect x="6" y="11" width="1" height="1" fill="#000" />
+
+        <!-- BODY (visible on hover) -->
+        <g class="horse-body">
+          <!-- Back/Body -->
+          <rect x="12" y="8" width="6" height="3" fill="#8B4513" />
+          <rect x="12" y="7" width="6" height="1" fill="#000" />
+          <rect x="18" y="8" width="1" height="3" fill="#000" />
+          <!-- Belly -->
+          <rect x="12" y="11" width="6" height="1" fill="#000" />
+          <!-- Tail -->
+          <rect x="18" y="9" width="1" height="2" fill="#000" />
+          <rect x="19" y="9" width="1" height="3" fill="#000" />
+          <rect x="20" y="10" width="1" height="3" fill="#000" />
+          <rect x="21" y="11" width="1" height="2" fill="#000" />
+          <!-- Front Legs (animated) -->
+          <g class="leg1">
+            <rect x="12" y="12" width="1" height="3" fill="#000" />
+          </g>
+          <g class="leg2">
+            <rect x="14" y="12" width="1" height="3" fill="#000" />
+          </g>
+          <!-- Back Legs (animated) -->
+          <g class="leg3">
+            <rect x="16" y="12" width="1" height="3" fill="#000" />
+          </g>
+          <g class="leg4">
+            <rect x="17" y="12" width="1" height="3" fill="#000" />
+          </g>
+        </g>
+      </svg>
     </div>
 
-    <footer class="footer">
-        All images in this gallery are AI-generated
-    </footer>
+    <div class="gallery-container">
+      <div class="gallery" id="gallery"></div>
+    </div>
+
+    <footer class="footer">All images in this gallery are AI-generated</footer>
 
     <script>
-        // Configuration
-        const imageFolder = 'images/';
-        
-        // Static list of available images
-        // This list is automatically generated during deployment by scanning the images/ folder
-        // To add new images: Just upload image files to the 'images/' folder and commit
-        // BUILD_INJECT_START
-        const availableImages = [
-            'IMG_0673.JPG',
-            'IMG_1580.JPG',
-            'IMG_1615.JPG',
-            'IMG_1628.JPG',
-            'IMG_1838 (1).JPG',
-            'IMG_1840.JPG',
-            'IMG_1853.JPG',
-            'IMG_1966.JPG',
-            'IMG_2019.JPG',
-            'IMG_2130 (1).JPG',
-            'IMG_2214.JPG',
-            'IMG_2611.JPG',
-            'IMG_3246.JPG',
-            'IMG_3261.JPG',
-            'IMG_3308.JPG',
-            'IMG_3319.JPG',
-            'IMG_3322.JPG',
-            'IMG_3383.JPG',
-            'IMG_3673.JPG',
-            'IMG_3692.JPG',
-            'IMG_4182.JPG',
-            'IMG_5345.JPG',
-            'IMG_5410.JPG',
-            'IMG_5915.JPG',
-            'IMG_5967.JPG',
-            'IMG_6241.JPG',
-            'IMG_6246.JPG',
-            'IMG_6319.JPG',
-            'IMG_6324.JPG',
-            'IMG_6405.JPG',
-            'IMG_6406.JPG',
-            'IMG_6418.JPG',
-            'IMG_7722.JPG',
-            'IMG_8903.JPG',
-            'IMG_8906.JPG',
-            'IMG_8908.JPG',
-            'IMG_8978.JPG',
-            'IMG_8980.JPG',
-            'IMG_9146.JPG'
-        ];
-        // BUILD_INJECT_END
-        
-        // Load images from the static list
-        function loadImages() {
-            const gallery = document.getElementById('gallery');
-            
-            // Display all images from the static list
-            availableImages.forEach((imageName) => {
-                addImageToGallery(imageName);
-            });
-        }
-        
-        // Add an image to the gallery
-        function addImageToGallery(imageName) {
-            const gallery = document.getElementById('gallery');
-            const item = document.createElement('div');
-            item.className = 'gallery-item';
-            
-            const img = document.createElement('img');
-            img.src = `${imageFolder}${imageName}`;
-            img.alt = imageName;
-            img.loading = 'lazy'; // Native lazy loading
-            
-            // Add loading class initially
-            img.classList.add('loading');
-            
-            // Remove loading class when image is fully loaded
-            img.onload = function() {
-                this.classList.remove('loading');
-                this.classList.add('loaded');
-            };
-            
-            // Remove item from DOM if image fails to load
-            img.onerror = function() {
-                console.error(`Failed to load image: ${imageFolder}${imageName}`);
-                item.remove();
-            };
-            
-            // Click handler to open image in full view
-            item.onclick = function() {
-                window.location.href = `image.html?img=${encodeURIComponent(imageName)}`;
-            };
-            
-            item.appendChild(img);
-            gallery.appendChild(item);
-        }
-        
-        // Load images when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', loadImages);
-        } else {
-            loadImages();
-        }
+      // Configuration
+      const imageFolder = "images/";
+
+      // Static list of available images
+      // This list is automatically generated during deployment by scanning the images/ folder
+      // To add new images: Just upload image files to the 'images/' folder and commit
+      // BUILD_INJECT_START
+      const availableImages = [
+        "IMG_0673.JPG",
+        "IMG_1580.JPG",
+        "IMG_1615.JPG",
+        "IMG_1628.JPG",
+        "IMG_1838 (1).JPG",
+        "IMG_1840.JPG",
+        "IMG_1853.JPG",
+        "IMG_1966.JPG",
+        "IMG_2019.JPG",
+        "IMG_2130 (1).JPG",
+        "IMG_2214.JPG",
+        "IMG_2611.JPG",
+        "IMG_3246.JPG",
+        "IMG_3261.JPG",
+        "IMG_3308.JPG",
+        "IMG_3319.JPG",
+        "IMG_3322.JPG",
+        "IMG_3383.JPG",
+        "IMG_3673.JPG",
+        "IMG_3692.JPG",
+        "IMG_4182.JPG",
+        "IMG_5345.JPG",
+        "IMG_5410.JPG",
+        "IMG_5915.JPG",
+        "IMG_5967.JPG",
+        "IMG_6241.JPG",
+        "IMG_6246.JPG",
+        "IMG_6319.JPG",
+        "IMG_6324.JPG",
+        "IMG_6405.JPG",
+        "IMG_6406.JPG",
+        "IMG_6418.JPG",
+        "IMG_7722.JPG",
+        "IMG_8903.JPG",
+        "IMG_8906.JPG",
+        "IMG_8908.JPG",
+        "IMG_8978.JPG",
+        "IMG_8980.JPG",
+        "IMG_9146.JPG",
+      ];
+      // BUILD_INJECT_END
+
+      // Load images from the static list
+      function loadImages() {
+        const gallery = document.getElementById("gallery");
+
+        // Display all images from the static list
+        availableImages.forEach((imageName) => {
+          addImageToGallery(imageName);
+        });
+      }
+
+      // Add an image to the gallery
+      function addImageToGallery(imageName) {
+        const gallery = document.getElementById("gallery");
+        const item = document.createElement("div");
+        item.className = "gallery-item";
+
+        const img = document.createElement("img");
+        img.src = `${imageFolder}${imageName}`;
+        img.alt = imageName;
+        img.loading = "lazy"; // Native lazy loading
+
+        // Add loading class initially
+        img.classList.add("loading");
+
+        // Remove loading class when image is fully loaded
+        img.onload = function () {
+          this.classList.remove("loading");
+          this.classList.add("loaded");
+        };
+
+        // Remove item from DOM if image fails to load
+        img.onerror = function () {
+          console.error(`Failed to load image: ${imageFolder}${imageName}`);
+          item.remove();
+        };
+
+        // Click handler to open image in full view
+        item.onclick = function () {
+          window.location.href = `image.html?img=${encodeURIComponent(
+            imageName
+          )}`;
+        };
+
+        item.appendChild(img);
+        gallery.appendChild(item);
+      }
+
+      // Load images when DOM is ready
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", loadImages);
+      } else {
+        loadImages();
+      }
     </script>
-</body>
+  </body>
 </html>
