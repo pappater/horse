@@ -16,11 +16,16 @@
         box-sizing: border-box;
       }
 
+      html {
+        overflow-x: hidden;
+      }
+
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           Oxygen, Ubuntu, Cantarell, sans-serif;
         background-color: #fafafa;
         padding-top: 80px;
+        overflow-x: hidden;
       }
 
       .title {
@@ -453,6 +458,109 @@
           padding: 15px;
           margin-top: 40px;
           font-size: 12px;
+        }
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.95);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .modal.show {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+      }
+
+      .modal-content {
+        position: relative;
+        max-width: 95%;
+        max-height: 95%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: modalZoom 0.3s ease;
+      }
+
+      @keyframes modalZoom {
+        from {
+          transform: scale(0.8);
+        }
+        to {
+          transform: scale(1);
+        }
+      }
+
+      .modal-content img {
+        max-width: 100%;
+        max-height: 95vh;
+        object-fit: contain;
+        border-radius: 4px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-close {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        color: #fff;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+        z-index: 2001;
+        background: rgba(0, 0, 0, 0.5);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        line-height: 1;
+        padding-bottom: 4px;
+      }
+
+      .modal-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.1);
+      }
+
+      @media screen and (max-width: 768px) {
+        .modal-close {
+          top: 15px;
+          right: 15px;
+          width: 45px;
+          height: 45px;
+          font-size: 35px;
+        }
+
+        .modal-content {
+          max-width: 98%;
+          max-height: 98%;
+        }
+
+        .modal-content img {
+          max-height: 90vh;
+        }
+      }
+
+      @media screen and (max-width: 480px) {
+        .modal-close {
+          top: 10px;
+          right: 10px;
+          width: 40px;
+          height: 40px;
+          font-size: 30px;
         }
       }
     </style>
@@ -960,6 +1068,14 @@
       </p>
     </footer>
 
+    <!-- Modal for image viewing -->
+    <div id="imageModal" class="modal">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <div class="modal-content">
+        <img id="modalImage" src="" alt="">
+      </div>
+    </div>
+
     <script>
       // Configuration
       const imageFolder = "images/";
@@ -1160,13 +1276,11 @@
           item.remove();
         };
 
-        // Click handler to open image in full view
+        // Click handler to open image in modal
         item.onclick = function (e) {
-          // Only navigate if image is loaded
+          // Only open modal if image is loaded
           if (img.classList.contains("loaded")) {
-            window.location.href = `image.html?img=${encodeURIComponent(
-              imageName
-            )}`;
+            openModal(imageUrl, imageName);
           }
         };
 
@@ -1190,6 +1304,51 @@
       } else {
         loadImages();
       }
+
+      // Modal functions
+      function openModal(imageUrl, imageName) {
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+        
+        modalImg.src = imageUrl;
+        modalImg.alt = imageName;
+        
+        // Show modal with animation
+        modal.style.display = "flex";
+        setTimeout(() => {
+          modal.classList.add("show");
+        }, 10);
+        
+        // Prevent body scroll when modal is open
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal() {
+        const modal = document.getElementById("imageModal");
+        
+        modal.classList.remove("show");
+        setTimeout(() => {
+          modal.style.display = "none";
+          document.body.style.overflow = "auto";
+        }, 300);
+      }
+
+      // Close modal on ESC key
+      document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") {
+          const modal = document.getElementById("imageModal");
+          if (modal.classList.contains("show")) {
+            closeModal();
+          }
+        }
+      });
+
+      // Close modal when clicking outside the image
+      document.getElementById("imageModal").addEventListener("click", function(event) {
+        if (event.target === this) {
+          closeModal();
+        }
+      });
     </script>
   </body>
 </html>
